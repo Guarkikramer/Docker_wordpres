@@ -1,0 +1,32 @@
+  db:
+  #image we are going to use for the container.
+    image: mysql:8.0
+    #place where the database is going to be stored
+    volumes:
+      - db_data:/var/lib/mysql
+  #configuration of the environment we are going to use in docker password database user.
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpresspassword
+      
+  wordpress:
+    image: wordpress:latest
+    #Place where the database is going to be stored
+    volumes:
+      - ./wordpress:/var/www/html
+      #Port where we are going to run the server
+    ports:
+      - “8080:80”
+      # wordpress database configuration
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+volumes:
+  db_data:
